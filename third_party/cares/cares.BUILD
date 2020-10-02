@@ -1,81 +1,43 @@
 load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 
 config_setting(
-    name = "darwin",
-    values = {"cpu": "darwin"},
+    name = "android",
+    constraint_values = ["@platforms//os:android"],
 )
 
 config_setting(
-    name = "darwin_x86_64",
-    values = {"cpu": "darwin_x86_64"},
+    name = "freebsd",
+    constraint_values = ["@platforms//os:freebsd"],
+)
+
+config_setting(
+    name = "ios",
+    constraint_values = ["@platforms//os:ios"],
+)
+
+config_setting(
+    name = "macos",
+    constraint_values = ["@platforms//os:macos"],
+)
+
+config_setting(
+    name = "openbsd",
+    constraint_values = ["@platforms//os:openbsd"],
+)
+
+config_setting(
+    name = "tvos",
+    constraint_values = ["@platforms//os:tvos"],
+)
+
+config_setting(
+    name = "watchos",
+    constraint_values = ["@platforms//os:watchos"],
 )
 
 config_setting(
     name = "windows",
-    values = {"cpu": "x64_windows"},
-)
-
-# Android is not officially supported through C++.
-# This just helps with the build for now.
-config_setting(
-    name = "android",
-    values = {
-        "crosstool_top": "//external:android/crosstool",
-    },
-)
-
-# iOS is not officially supported through C++.
-# This just helps with the build for now.
-config_setting(
-    name = "ios_x86_64",
-    values = {"cpu": "ios_x86_64"},
-)
-
-config_setting(
-    name = "ios_armv7",
-    values = {"cpu": "ios_armv7"},
-)
-
-config_setting(
-    name = "ios_armv7s",
-    values = {"cpu": "ios_armv7s"},
-)
-
-config_setting(
-    name = "ios_arm64",
-    values = {"cpu": "ios_arm64"},
-)
-
-# The following architectures are found in 
-# https://github.com/bazelbuild/bazel/blob/master/src/main/java/com/google/devtools/build/lib/rules/apple/ApplePlatform.java
-config_setting(
-    name = "tvos_x86_64",
-    values = {"cpu": "tvos_x86_64"},
-)
-
-config_setting(
-    name = "tvos_arm64",
-    values = {"cpu": "tvos_arm64"}
-)
-
-config_setting(
-    name = "watchos_i386",
-    values = {"cpu": "watchos_i386"},
-)
-
-config_setting(
-    name = "watchos_x86_64",
-    values = {"cpu": "watchos_x86_64"}
-)
-
-config_setting(
-    name = "watchos_armv7k",
-    values = {"cpu": "watchos_armv7k"},
-)
-
-config_setting(
-    name = "watchos_arm64_32",
-    values = {"cpu": "watchos_arm64_32"}
+    constraint_values = ["@platforms//os:windows"],
 )
 
 copy_file(
@@ -87,20 +49,14 @@ copy_file(
 copy_file(
     name = "ares_config_h",
     src = select({
-        ":ios_x86_64": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":ios_armv7": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":ios_armv7s": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":ios_arm64": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":tvos_x86_64": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":tvos_arm64": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":watchos_i386": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":watchos_x86_64": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":watchos_armv7k": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":watchos_arm64_32": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":darwin": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":darwin_x86_64": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
-        ":windows": "@com_github_grpc_grpc//third_party/cares:config_windows/ares_config.h",
         ":android": "@com_github_grpc_grpc//third_party/cares:config_android/ares_config.h",
+        ":ios": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
+        ":macos": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
+        ":tvos": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
+        ":watchos": "@com_github_grpc_grpc//third_party/cares:config_darwin/ares_config.h",
+        ":freebsd": "@com_github_grpc_grpc//third_party/cares:config_freebsd/ares_config.h",
+        ":openbsd": "@com_github_grpc_grpc//third_party/cares:config_openbsd/ares_config.h",
+        ":windows": "@com_github_grpc_grpc//third_party/cares:config_windows/ares_config.h",
         "//conditions:default": "@com_github_grpc_grpc//third_party/cares:config_linux/ares_config.h",
     }),
     out = "ares_config.h",
